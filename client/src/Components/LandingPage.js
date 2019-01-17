@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import Header from "./Header/Header";
+import UserInput from "./Input/UserInput";
 
 class LandingPage extends Component {
   render() {
     return (
       <div>
-        Page
+        <Header />
+        <UserInput />
       </div>
     );
   }
 }
 
-export default (LandingPage);
+export default LandingPage;
