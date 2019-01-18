@@ -44,12 +44,27 @@ class UserInput extends React.Component {
     const { isValid, errors } = userInput(data);
     if (!isValid) {
       this.setState({ error: errors });
+    } else {
+      this.props.addParitcipant(data);
+      this.setState({
+        error: {},
+        name: "",
+        email: "",
+        institution: "",
+        contact: ""
+      });
     }
   };
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <FormHelperText
+          id="component-error-text"
+          style={{ color: "red", fontSize: 30 }}
+        >
+          {this.props.glberr}
+        </FormHelperText>
         <TextField
           id="standard-search"
           label="Name"
@@ -120,12 +135,12 @@ class UserInput extends React.Component {
           {this.state.error.level}
         </FormHelperText>
         <Button
-          variant="outlined"
+          variant="contained"
           style={{ margin: 10 }}
           color="primary"
           onClick={this.addUser}
         >
-          Submit
+          Register
         </Button>
       </div>
     );

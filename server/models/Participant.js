@@ -60,7 +60,7 @@ ParticipantSchema.statics.insertNewParticipant = (data, cb) => {
     } else {
       return cb(
         400,
-        { msg: "Participant Already Exists", Participant: participant },
+        { msg: "Participant Already Exists"},
         null
       );
     }

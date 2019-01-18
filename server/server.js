@@ -39,6 +39,9 @@ app.use(express.static(process.cwd() + '/public'));
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
+const mainRouter = require('./routes/main');
+app.use('/main', mainRouter);
+
 app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
