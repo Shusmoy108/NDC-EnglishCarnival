@@ -18,7 +18,12 @@ function SimpleAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <img src={logo} className="App-logo" alt="logo" />
+          <img
+            src={logo}
+            className="App-logo"
+            alt="logo"
+            style={{ width: "100%" }}
+          />
         </Toolbar>
       </AppBar>
     </div>

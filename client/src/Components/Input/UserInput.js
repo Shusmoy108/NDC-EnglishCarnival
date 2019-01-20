@@ -137,7 +137,7 @@ class UserInput extends React.Component {
         <Button
           variant="contained"
           style={{ margin: 10 }}
-          color="primary"
+          color="secondary"
           onClick={this.addUser}
         >
           Register

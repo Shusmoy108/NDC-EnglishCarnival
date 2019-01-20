@@ -20,11 +20,29 @@ export function addParitcipant(name, institution, contact, email, level, cb) {
     });
 }
 
-export function addEvents(individualEvents, teamEvents, cb) {
+export function addEvents(individualEvents, teamEvents,id,participant, cb) {
   axios
     .post("/main/event", {
       teamEvents: teamEvents,
-      individualEvents: individualEvents
+      individualEvents: individualEvents,
+      id:id,
+      participant:participant
+    })
+    .then(res => {
+      cb(null, res.data);
+    })
+    .catch(err => {
+      let error = {
+        msg: "Internal Server Error"
+      };
+      cb(error, null);
+    });
+}
+
+export function getParticpants(page, cb) {
+  axios
+    .post("/main/participants", {
+      page: page
     })
     .then(res => {
       cb(null, res.data);

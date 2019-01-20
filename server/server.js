@@ -30,6 +30,7 @@ app.use(cors({
 // Serve static files from the React app after npm run build
 
 app.use(express.static(path.join(__dirname, 'client/build')));
+app.use("/public", express.static(__dirname + "/public"));
 app.get('/', (req, res) => {
     res.send('express server running');
 });

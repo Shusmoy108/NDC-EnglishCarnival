@@ -33,26 +33,41 @@ class LandingPage extends Component {
       data.level,
       (err, data) => {
         console.log(data);
+        if (data && data.success) {
+          this.setState(
+            {
+              tabname: "Event Registration",
+              glberr: "",
+              participant: data.participant
+            },
+            () => {
+              this.setState({ tabs: 1 });
+            }
+          );
+        } else {
+          this.setState({ glberr: "Internal Server Error" });
+        }
+      }
+    );
+  };
+  addEvents = (individualEvents, teamEvents, id) => {
+    addEvents(
+      individualEvents,
+      teamEvents,
+      id,
+      this.state.participant,
+      (err, data) => {
         if (data.success) {
-          this.setState({ tabname: "Event Registration", glberr: "", tabs: 1 });
+          this.setState({
+            tabname: "Event Registration Completed",
+            glberr: "",
+            tabs: -1
+          });
         } else {
           this.setState({ glberr: err.msg });
         }
       }
     );
-  };
-  addEvents = (individualEvents, teamEvents) => {
-    addEvents(individualEvents, teamEvents, (err, data) => {
-      if (data.success) {
-        this.setState({
-          tabname: "Event Registration Completed",
-          glberr: "",
-          tabs: -1
-        });
-      } else {
-        this.setState({ glberr: err.msg });
-      }
-    });
   };
   render() {
     const { classes } = this.props;
@@ -69,7 +84,11 @@ class LandingPage extends Component {
           />
         )}
         {this.state.tabs === 1 && (
-          <EventInput addEvents={this.addEvents} glberr={this.state.glberr} />
+          <EventInput
+            addEvents={this.addEvents}
+            glberr={this.state.glberr}
+            participant={this.state.participant}
+          />
         )}
         {this.state.tabs === -1 && (
           <div

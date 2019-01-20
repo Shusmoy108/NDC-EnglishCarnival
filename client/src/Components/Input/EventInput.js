@@ -158,7 +158,11 @@ class UserInput extends React.Component {
         };
         team_event.push(e);
       }
-      this.props.addEvents(individual_events, team_event);
+      this.props.addEvents(
+        individual_events,
+        team_event,
+        this.props.participant._id
+      );
     }
   };
   render() {
@@ -181,35 +185,39 @@ class UserInput extends React.Component {
       mq
     } = this.state;
     return (
-      <div><div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-    <FormHelperText
-          id="component-error-text"
-          style={{ color: "red", fontSize: 30 }}
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
         >
-          {this.props.glberr}
-        </FormHelperText>
-    </div>
+          <FormHelperText
+            id="component-error-text"
+            style={{ color: "red", fontSize: 30 }}
+          >
+            {this.props.glberr}
+          </FormHelperText>
+        </div>
         <div style={{ display: "flex" }}>
           <div className={classes.input}>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormLabel component="legend">Individual Events</FormLabel>
               <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={sm}
-                      onChange={this.handleChange("sm")}
-                      value="sm"
-                    />
-                  }
-                  label="Spell Master"
-                />
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={sm}
+                        onChange={this.handleChange("sm")}
+                        value="sm"
+                      />
+                    }
+                    label="Spell Master"
+                  />
+                )}
+
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -220,26 +228,31 @@ class UserInput extends React.Component {
                   }
                   label="English Olympiad"
                 />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={r}
-                      onChange={this.handleChange("r")}
-                      value="r"
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={r}
+                        onChange={this.handleChange("r")}
+                        value="r"
+                      />
+                    }
+                    label="Recitation"
+                  />
+                )}
+                {this.props.participant.level !== "University" ||
+                  (this.props.participant.level !== "Primary" && (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={tc}
+                          onChange={this.handleChange("tc")}
+                          value="tc"
+                        />
+                      }
+                      label="Turn Coat"
                     />
-                  }
-                  label="Recitation"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={tc}
-                      onChange={this.handleChange("tc")}
-                      value="tc"
-                    />
-                  }
-                  label="Turn Coat"
-                />
+                  ))}
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -260,17 +273,18 @@ class UserInput extends React.Component {
                   }
                   label="Instant Story Writting"
                 />
-
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={wp}
-                      onChange={this.handleChange("wp")}
-                      value="wp"
-                    />
-                  }
-                  label="Word Play"
-                />
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={wp}
+                        onChange={this.handleChange("wp")}
+                        value="wp"
+                      />
+                    }
+                    label="Word Play"
+                  />
+                )}
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -281,36 +295,42 @@ class UserInput extends React.Component {
                   }
                   label="Composition Submission"
                 />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={pnr}
-                      onChange={this.handleChange("pnr")}
-                      value="pnr"
-                    />
-                  }
-                  label="Parody News Reading"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={wms}
-                      onChange={this.handleChange("wms")}
-                      value="wms"
-                    />
-                  }
-                  label="Wall Magazine Submission"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={ss}
-                      onChange={this.handleChange("ss")}
-                      value="ss"
-                    />
-                  }
-                  label="Scrapbook Submission"
-                />
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={pnr}
+                        onChange={this.handleChange("pnr")}
+                        value="pnr"
+                      />
+                    }
+                    label="Parody News Reading"
+                  />
+                )}
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={wms}
+                        onChange={this.handleChange("wms")}
+                        value="wms"
+                      />
+                    }
+                    label="Wall Magazine Submission"
+                  />
+                )}
+                {this.props.participant.level !== "University" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={ss}
+                        onChange={this.handleChange("ss")}
+                        value="ss"
+                      />
+                    }
+                    label="Scrapbook Submission"
+                  />
+                )}
               </FormGroup>
             </FormControl>
           </div>
@@ -321,16 +341,19 @@ class UserInput extends React.Component {
                 You and Your TeamMates should have the same Team name
               </FormHelperText>
               <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={mp}
-                      onChange={this.handleChange("mp")}
-                      value="mp"
-                    />
-                  }
-                  label="Multimedia Presentation(Maximum 3 members)"
-                />
+                {(this.props.participant.level !== "University" ||
+                  this.props.participant.level !== "Primary") && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={mp}
+                        onChange={this.handleChange("mp")}
+                        value="mp"
+                      />
+                    }
+                    label="Multimedia Presentation(Maximum 3 members)"
+                  />
+                )}
                 <TextField
                   disabled={!mp}
                   id="standard-search"
@@ -344,29 +367,33 @@ class UserInput extends React.Component {
                 <FormHelperText style={{ color: "red" }}>
                   {this.state.errors.mp}
                 </FormHelperText>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={lq}
-                      onChange={this.handleChange("lq")}
-                      value="lq"
+                {this.props.participant.level !== "Primary" && (
+                  <div>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={lq}
+                          onChange={this.handleChange("lq")}
+                          value="lq"
+                        />
+                      }
+                      label="Literature Quiz(Maximum 3 members)"
                     />
-                  }
-                  label="Lit Quiz(Maximum 3 members)"
-                />
-                <TextField
-                  disabled={!lq}
-                  id="standard-search"
-                  label="Team Name"
-                  placeholder="Enter a Team Name"
-                  type="search"
-                  value={this.state.lqtm}
-                  onChange={this.handleState("lqtm")}
-                  margin="normal"
-                />
-                <FormHelperText style={{ color: "red" }}>
-                  {this.state.errors.lq}
-                </FormHelperText>
+                    <TextField
+                      disabled={!lq}
+                      id="standard-search"
+                      label="Team Name"
+                      placeholder="Enter a Team Name"
+                      type="search"
+                      value={this.state.lqtm}
+                      onChange={this.handleState("lqtm")}
+                      margin="normal"
+                    />
+                    <FormHelperText style={{ color: "red" }}>
+                      {this.state.errors.lq}
+                    </FormHelperText>
+                  </div>
+                )}
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -417,6 +444,7 @@ class UserInput extends React.Component {
             </FormControl>
           </div>
         </div>
+
         <div
           style={{
             display: "flex",
@@ -427,7 +455,7 @@ class UserInput extends React.Component {
           <Button
             variant="contained"
             style={{ margin: 10 }}
-            color="primary"
+            color="secondary"
             onClick={this.addEvent}
           >
             Participate

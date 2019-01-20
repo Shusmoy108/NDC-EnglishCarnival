@@ -8,9 +8,7 @@ const ParticipantSchema = new Schema({
     required: true
   },
   userid: {
-    type: Number,
-    required: true,
-    unique: true
+    type: Number
   },
   institution: {
     type: String,
@@ -33,6 +31,10 @@ const ParticipantSchema = new Schema({
   },
   teamEvent: {
     type: Array
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
@@ -54,16 +56,47 @@ ParticipantSchema.statics.insertNewParticipant = (data, cb) => {
           return cb(200, null, participant);
         })
         .catch(err => {
-          return cb(500, { msg: "Internal server Error" }, null);
+          return cb(500, { msg: err }, null);
           // //console.log(err);
         });
     } else {
-      return cb(
-        400,
-        { msg: "Participant Already Exists"},
-        null
-      );
+      return cb(400, { msg: "Participant Already Exist" }, null);
     }
   });
 };
-module.exports = mongoose.model("Participant", ParticipantSchema);
+ParticipantSchema.statics.updateEvents = (data, cb) => {
+  var query = { _id: data.id };
+  var options = { new: true };
+  var update = {
+    individualEvent: data.individualEvents,
+    teamEvent: data.teamEvents
+  };
+
+  Participant.findOneAndUpdate(query, update, options, function(
+    err,
+    updateEvent
+  ) {
+    if (err) {
+      return cb(500, { msg: "Internal Server error" }, null);
+    } else {
+      ////console.log(updatetag);
+      return cb(200, null, updateEvent);
+    }
+  });
+};
+ParticipantSchema.statics.getParticipant = (page, cb) => {
+  let perPage = 30;
+  let date = new Date();
+  Participant.find({ createdAt: { $lt: date } })
+    .limit(perPage)
+    .skip(perPage * page)
+    .sort({ createdAt: "desc" })
+    .exec(function(err, participants) {
+      if (err) {
+        return cb(500, { msg: "Internal server Error" }, null);
+      } else {
+        return cb(200, null, participants);
+      }
+    });
+};
+module.exports = Participant = mongoose.model("participant", ParticipantSchema);
